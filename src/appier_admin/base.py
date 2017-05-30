@@ -94,31 +94,9 @@ class Api(appier.OAuth2Api):
         if auth: kwargs["session_id"] = self.get_session_id()
         if token: kwargs["access_token"] = self.get_access_token()
 
-    def handle_error(self, error):
-        if self.is_direct(): self.handle_direct(error)
-        elif self.is_oauth(): raise appier.OAuthAccessError(
-            message = "Problems using access token found must re-authorize"
-        )
-        raise
-
-    def handle_direct(self, error):
-        if not self.wrap_exception: raise
-        data = error.read_json()
-        if not data: raise
-        exception = data.get("exception", {})
-        error = errors.OmniError(error, exception)
-        raise error
-
     def get_session_id(self):
         if self.session_id: return self.session_id
-        if self.is_direct(): return self.login()
-        elif self.is_oauth(): return self.oauth_session()
-
-    def get_access_token(self):
-        if self.access_token: return self.access_token
-        raise appier.OAuthAccessError(
-            message = "No access token found must re-authorize"
-        )
+        return self.oauth_login()
 
     def auth_callback(self, params, headers):
         if not self._has_mode(): raise appier.APIAccessError(
