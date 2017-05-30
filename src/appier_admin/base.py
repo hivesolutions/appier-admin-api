@@ -128,26 +128,6 @@ class Api(appier.OAuth2Api):
         session_id = self.get_session_id()
         params["session_id"] = session_id
 
-    def login(self, username = None, password = None):
-        username = username or self.username
-        password = password or self.password
-        url = self.base_url + "omni/login.json"
-        contents = self.get(
-            url,
-            callback = False,
-            auth = False,
-            token = False,
-            username = username,
-            password = password
-        )
-        self.username = contents.get("username", None)
-        self.object_id = contents.get("object_id", None)
-        self.acl = contents.get("acl", None)
-        self.session_id = contents.get("session_id", None)
-        self.tokens = self.acl.keys()
-        self.trigger("auth", contents)
-        return self.session_id
-
     def oauth_authorize(self, state = None):
         url = self.base_url + self.prefix + "oauth/authorize"
         values = dict(
@@ -162,7 +142,7 @@ class Api(appier.OAuth2Api):
         return url
 
     def oauth_access(self, code):
-        url = self.base_url + "omni/oauth/access_token"
+        url = self.base_url + "oauth/access_token"
         contents = self.post(
             url,
             auth = False,
@@ -177,8 +157,8 @@ class Api(appier.OAuth2Api):
         self.trigger("access_token", self.access_token)
         return self.access_token
 
-    def oauth_session(self):
-        url = self.base_url + "omni/oauth/start_session"
+    def oauth_login(self):
+        url = self.base_url + "oauth/login"
         contents = self.get(url, callback = False, auth = False, token = True)
         self.username = contents.get("username", None)
         self.object_id = contents.get("object_id", None)
@@ -189,12 +169,6 @@ class Api(appier.OAuth2Api):
         return self.session_id
 
     def ping(self):
-        return self.self_user()
-
-    def _has_mode(self):
-        return self.is_direct() or self.is_oauth()
-
-    def _get_mode(self):
-        if self.username and self.password: return appier.OAuthApi.DIRECT_MODE
-        elif self.client_id and self.client_secret: return appier.OAuthApi.OAUTH_MODE
-        return appier.OAuthApi.UNSET_MODE
+        url = self.base_url + "ping"
+        contents = self.get(url, auth = False)
+        return contents
