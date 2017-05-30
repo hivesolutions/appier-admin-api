@@ -39,7 +39,7 @@ __license__ = "Apache License, Version 2.0"
 
 import appier
 
-BASE_URL = "http://localhost:8080/admin/"
+BASE_URL = "http://localhost:8080/"
 """ The default base url to be used when no other
 base url value is provided to the constructor """
 
@@ -107,7 +107,7 @@ class Api(appier.OAuth2Api):
         params["session_id"] = session_id
 
     def oauth_authorize(self, state = None):
-        url = self.base_url + self.prefix + "oauth/authorize"
+        url = self.base_url + self.prefix + "admin/oauth/authorize"
         values = dict(
             client_id = self.client_id,
             redirect_uri = self.redirect_url,
@@ -120,7 +120,7 @@ class Api(appier.OAuth2Api):
         return url
 
     def oauth_access(self, code):
-        url = self.base_url + "oauth/access_token"
+        url = self.base_url + "admin/oauth/access_token"
         contents = self.post(
             url,
             auth = False,
@@ -136,7 +136,7 @@ class Api(appier.OAuth2Api):
         return self.access_token
 
     def oauth_login(self):
-        url = self.base_url + "oauth/login"
+        url = self.base_url + "admin/oauth/login"
         contents = self.get(url, callback = False, auth = False, token = True)
         self.username = contents.get("username", None)
         self.session_id = contents.get("session_id", None)
@@ -145,6 +145,11 @@ class Api(appier.OAuth2Api):
         return self.session_id
 
     def ping(self):
-        url = self.base_url + "ping"
+        url = self.base_url + "api/admin/ping"
         contents = self.get(url, auth = False)
+        return contents
+
+    def routes(self):
+        url = self.base_url + "api/admin/routes"
+        contents = self.get(url)
         return contents

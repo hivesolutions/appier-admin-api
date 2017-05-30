@@ -39,7 +39,7 @@ __license__ = "Apache License, Version 2.0"
 
 import appier
 
-from . import base
+import base
 
 class AppierAdminApp(appier.WebApp):
 
@@ -52,7 +52,13 @@ class AppierAdminApp(appier.WebApp):
 
     @appier.route("/", "GET")
     def index(self):
-        return self.ping()
+        return self.routes()
+
+    @appier.route("/routes", "GET")
+    def routes(self):
+        api = self.get_api()
+        contents = api.routes()
+        return contents
 
     @appier.route("/ping", "GET")
     def ping(self):
@@ -60,8 +66,28 @@ class AppierAdminApp(appier.WebApp):
         contents = api.ping()
         return contents
 
+    @appier.route("/oauth", "GET")
+    def oauth(self):
+        code = self.field("code")
+        api = self.get_api()
+        access_token = api.oauth_access(code)
+        self.session["appier_admin.access_token"] = access_token
+        return self.redirect(
+            self.url_for("appier_admin.index")
+        )
+
+    @appier.exception_handler(appier.OAuthAccessError)
+    def oauth_error(self, error):
+        if "appier_admin.access_token" in self.session:
+            del self.session["appier_admin.access_token"]
+        return self.redirect(
+            self.url_for("appier_admin.index")
+        )
+
     def get_api(self):
+        access_token = self.session and self.session.get("appier_admin.access_token", None)
         api = base.get_api()
+        api.access_token = access_token
         return api
 
 if __name__ == "__main__":
