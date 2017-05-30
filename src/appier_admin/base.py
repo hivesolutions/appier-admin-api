@@ -107,7 +107,7 @@ class Api(appier.OAuth2Api):
         params["session_id"] = session_id
 
     def oauth_authorize(self, state = None):
-        url = self.base_url + self.prefix + "admin/oauth/authorize"
+        url = self.base_url + "admin/oauth/authorize"
         values = dict(
             client_id = self.client_id,
             redirect_uri = self.redirect_url,
@@ -149,7 +149,7 @@ class Api(appier.OAuth2Api):
         contents = self.get(url, auth = False)
         return contents
 
-    def routes(self):
-        url = self.base_url + "api/admin/routes"
+    def me_account(self):
+        url = self.base_url + "api/admin/accounts/me"
         contents = self.get(url)
         return contents

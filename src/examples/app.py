@@ -52,16 +52,20 @@ class AppierAdminApp(appier.WebApp):
 
     @appier.route("/", "GET")
     def index(self):
-        return self.routes()
+        return self.me_account()
 
-    @appier.route("/routes", "GET")
-    def routes(self):
+    @appier.route("/me_account", "GET")
+    def me_account(self):
+        url = self.ensure_api()
+        if url: return self.redirect(url)
         api = self.get_api()
-        contents = api.routes()
+        contents = api.me_account()
         return contents
 
     @appier.route("/ping", "GET")
     def ping(self):
+        url = self.ensure_api()
+        if url: return self.redirect(url)
         api = self.get_api()
         contents = api.ping()
         return contents
@@ -83,6 +87,12 @@ class AppierAdminApp(appier.WebApp):
         return self.redirect(
             self.url_for("appier_admin.index")
         )
+
+    def ensure_api(self):
+        access_token = self.session.get("appier_admin.access_token", None)
+        if access_token: return
+        api = base.get_api()
+        return api.oauth_authorize()
 
     def get_api(self):
         access_token = self.session and self.session.get("appier_admin.access_token", None)
