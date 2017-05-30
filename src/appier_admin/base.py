@@ -63,32 +63,19 @@ class Api(appier.OAuth2Api):
 
     def __init__(self, *args, **kwargs):
         appier.OAuth2Api.__init__(self, *args, **kwargs)
-        self.base_url = appier.conf("OMNI_BASE_URL", BASE_URL)
-        self.open_url = appier.conf("OMNI_OPEN_URL", self.base_url)
-        self.prefix = appier.conf("OMNI_PREFIX", "adm/")
-        self.client_id = appier.conf("OMNI_ID", CLIENT_ID)
-        self.client_secret = appier.conf("OMNI_SECRET", CLIENT_SECRET)
-        self.redirect_url = appier.conf("OMNI_REDIRECT_URL", REDIRECT_URL)
-        self.scope = appier.conf("OMNI_SCOPE", SCOPE)
-        self.username = appier.conf("OMNI_USERNAME", None)
-        self.password = appier.conf("OMNI_PASSWORD", None)
+        self.base_url = appier.conf("ADMIN_BASE_URL", BASE_URL)
+        self.client_id = appier.conf("ADMIN_ID", CLIENT_ID)
+        self.client_secret = appier.conf("ADMIN_SECRET", CLIENT_SECRET)
+        self.redirect_url = appier.conf("ADMIN_REDIRECT_URL", REDIRECT_URL)
+        self.scope = appier.conf("ADMIN_SCOPE", SCOPE)
         self.base_url = kwargs.get("base_url", self.base_url)
-        self.open_url = kwargs.get("open_url", self.open_url)
-        self.prefix = kwargs.get("prefix", self.prefix)
         self.client_id = kwargs.get("client_id", self.client_id)
         self.client_secret = kwargs.get("client_secret", self.client_secret)
         self.redirect_url = kwargs.get("redirect_url", self.redirect_url)
         self.scope = kwargs.get("scope", self.scope)
         self.access_token = kwargs.get("access_token", None)
         self.session_id = kwargs.get("session_id", None)
-        self.username = kwargs.get("username", self.username)
-        self.password = kwargs.get("password", self.password)
-        self.object_id = kwargs.get("object_id", None)
-        self.acl = kwargs.get("acl", None)
         self.tokens = kwargs.get("tokens", None)
-        self.company = kwargs.get("company", None)
-        self.wrap_exception = kwargs.get("wrap_exception", True)
-        self.mode = kwargs.get("mode", None) or self._get_mode()
 
     def build(
         self,
@@ -129,7 +116,6 @@ class Api(appier.OAuth2Api):
 
     def get_access_token(self):
         if self.access_token: return self.access_token
-        if self.is_direct(): return None
         raise appier.OAuthAccessError(
             message = "No access token found must re-authorize"
         )
