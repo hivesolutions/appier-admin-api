@@ -39,35 +39,7 @@ __license__ = "Apache License, Version 2.0"
 
 import appier
 
-from . import web
-from . import sale
-from . import user
-from . import store
-from . import media
-from . import errors
-from . import entity
-from . import return_
-from . import invoice
-from . import product
-from . import customer
-from . import supplier
-from . import transfer
-from . import document
-from . import employee
-from . import sale_order
-from . import credit_note
-from . import sub_product
-from . import merchandise
-from . import sale_snapshot
-from . import inventory_line
-from . import system_company
-from . import money_sale_slip
-from . import signed_document
-from . import consignment_out
-from . import consignment_slip
-from . import stock_adjustment
-
-BASE_URL = "http://localhost:8080/mvc/"
+BASE_URL = "http://localhost:8080/admin/"
 """ The default base url to be used when no other
 base url value is provided to the constructor """
 
@@ -83,13 +55,7 @@ REDIRECT_URL = "http://localhost:8080/oauth"
 """ The redirect url used as default (fallback) value
 in case none is provided to the api (client) """
 
-SCOPE = (
-    "base",
-    "base.user",
-    "base.admin",
-    "foundation.store.list",
-    "foundation.web.subscribe"
-)
+SCOPE = ("admin", "user")
 """ The list of permissions to be used to create the
 scope string for the oauth value """
 
