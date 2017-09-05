@@ -59,10 +59,10 @@ SCOPE = ("admin", "user")
 """ The list of permissions to be used to create the
 scope string for the oauth value """
 
-class Api(appier.OAuth2Api):
+class API(appier.OAuth2API):
 
     def __init__(self, *args, **kwargs):
-        appier.OAuth2Api.__init__(self, *args, **kwargs)
+        appier.OAuth2API.__init__(self, *args, **kwargs)
         self.base_url = appier.conf("ADMIN_BASE_URL", BASE_URL)
         self.client_id = appier.conf("ADMIN_ID", CLIENT_ID)
         self.client_secret = appier.conf("ADMIN_SECRET", CLIENT_SECRET)

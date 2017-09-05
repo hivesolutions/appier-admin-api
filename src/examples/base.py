@@ -40,4 +40,4 @@ __license__ = "Apache License, Version 2.0"
 import appier_admin
 
 def get_api():
-    return appier_admin.Api()
+    return appier_admin.API()
