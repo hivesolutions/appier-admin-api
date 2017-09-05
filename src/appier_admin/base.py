@@ -40,8 +40,8 @@ __license__ = "Apache License, Version 2.0"
 import appier
 
 BASE_URL = "http://localhost:8080/"
-""" The default base url to be used when no other
-base url value is provided to the constructor """
+""" The default base URL to be used when no other
+base URL value is provided to the constructor """
 
 CLIENT_ID = None
 """ The default value to be used for the client id
@@ -52,7 +52,7 @@ CLIENT_SECRET = None
 no client secret has been provided to the client """
 
 REDIRECT_URL = "http://localhost:8080/oauth"
-""" The redirect url used as default (fallback) value
+""" The redirect URL used as default (fallback) value
 in case none is provided to the api (client) """
 
 SCOPE = ("admin", "user")
