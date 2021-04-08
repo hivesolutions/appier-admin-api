@@ -44,9 +44,9 @@ class ModelAPI(object):
         contents = self.get(url, **kwargs)
         return contents
 
-    def get_model(self, model):
+    def get_model(self, model, *args, **kwargs):
         url = self.base_url + "api/admin/models/%s" % model
-        contents = self.get(url)
+        contents = self.get(url, **kwargs)
         return contents
 
     def create_entity(self, model, payload):
