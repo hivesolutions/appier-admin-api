@@ -39,6 +39,8 @@ __license__ = "Apache License, Version 2.0"
 
 import appier
 
+from . import model
+
 BASE_URL = "http://localhost:8080/"
 """ The default base URL to be used when no other
 base URL value is provided to the constructor """
@@ -59,7 +61,10 @@ SCOPE = ("admin", "user")
 """ The list of permissions to be used to create the
 scope string for the oauth value """
 
-class API(appier.OAuth2API):
+class API(
+    appier.OAuth2API,
+    model.ModelAPI
+):
 
     def __init__(self, *args, **kwargs):
         appier.OAuth2API.__init__(self, *args, **kwargs)
